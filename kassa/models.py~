@@ -16,3 +16,4 @@ class Arxiv(models.Model):
     summa = models.BigIntegerField()
     sold = models.DateField(auto_now_add=True)
     user = models.ForeignKey(Kassir, on_delete=models.CASCADE)
+    
