@@ -8,7 +8,7 @@ from .views import FirmaList,\
     ProductList,\
     ProductDetail,\
     search_product_name,\
-    get_product_by_barcode
+    get_product_by_barcode, Spisaniya
 
 urlpatterns = [
     path('kassir/', include('kassir.urls')),
@@ -24,6 +24,8 @@ urlpatterns = [
 
     path('product/', ProductList.as_view()),
     path('product/<int:pk>/', ProductDetail.as_view()),
+
+    path('spisaniya/<int:pk>/', Spisaniya.as_view()),
 
     path('search_name/', search_product_name),
     path('search_barcode/', get_product_by_barcode),

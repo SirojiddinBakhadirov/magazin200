@@ -1,5 +1,6 @@
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
+from rest_framework.decorators import action, api_view
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -45,6 +46,7 @@ class NakladnoyDetail(RetrieveUpdateDestroyAPIView):
 
 
 class ProductList(ListCreateAPIView):
+    # queryset = Product.objects.all()
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
@@ -56,6 +58,9 @@ class ProductList(ListCreateAPIView):
 
         if pereotsenka:
             queryset = queryset.filter(pereotsenka=True)
+            return queryset
+        elif pereotsenka:
+            queryset = queryset.filter(pereotsenka=False)
             return queryset
         else:
             return queryset
@@ -83,6 +88,29 @@ class ProductDetail(APIView):
         product = self.get_object(pk)
         product.delete()
         return HttpResponse('delete')
+
+# @api_view(['PATCH'])
+# def spisaniya_patch(self, request, pk):
+#     product_object = Product.objects.get(pk=pk)
+#     serializer = ProductSerializer(product_object, data=request.data, partial=True)
+#     if serializer.is_valid():
+#         serializer.save()
+#         return JsonResponse(data=serializer.data)
+#     return JsonResponse(data='error')
+
+
+class Spisaniya(APIView):
+    def get_object(self, id):
+        return Product.objects.get(id=id)
+
+    def patch(self, request, pk):
+        product_object = self.get_object(pk)
+        serializer = ProductSerializer(product_object, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            Product.objects.filter(pk=pk).update(spisaniya=True)
+            return JsonResponse(data=serializer.data)
+        return JsonResponse(data='error')
 
 
 def get_product_by_barcode(request):
@@ -133,3 +161,4 @@ def search_product_name(request):
 
     finally:
         return JsonResponse(response, safe=False)
+

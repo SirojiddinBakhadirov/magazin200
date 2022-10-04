@@ -21,7 +21,7 @@ class Product(models.Model):
     barcode = models.IntegerField()
     nakladnoy = models.ForeignKey(Nakladnoy, on_delete=models.CASCADE)
     amount = models.IntegerField()
-    term = models.DateField(auto_created=True)
+    term = models.DateField()
     created = models.DateField(auto_now_add=True)
     ishlab_chiqaruvchi = models.CharField(max_length=200)
     come_price = models.IntegerField()
@@ -29,6 +29,5 @@ class Product(models.Model):
     sale_price = models.IntegerField()
     pereotsenka = models.BooleanField(default=False)
     spisaniya = models.BooleanField(default=False)
-
 
 
